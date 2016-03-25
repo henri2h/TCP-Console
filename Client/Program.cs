@@ -30,7 +30,7 @@ namespace Client
             // initialisation = ok
             while (true)
             {
-                
+
                 //string input_text = sr.ReadLine();
                 sw.Flush();
                 Console.WriteLine(client.Client.Connected.ToString());
@@ -57,9 +57,29 @@ namespace Client
                                 sw.WriteLine(Console.ReadLine());
                             }
                             else
-                                if(parameterName == "recieve")
+                                if (parameterName == "recieve")
                             {
-                                // to add
+                                long fileSize = long.Parse(sr.ReadLine());// your file size that you are going to receive it.
+                                string name = sr.ReadLine();
+                                string destPath = @"D:\" + name;
+                                using (FileStream fs = new FileStream(destPath, FileMode.Create, FileAccess.Write))
+                                {
+                                    int count = 0;
+                                    long sum = 0;   //sum here is the total of received bytes.
+                                    byte[] data = new byte[1024 * 8];  //8Kb buffer .. you might use a smaller size also.
+                                    while (sum < fileSize)
+                                    {
+                                        if (s.DataAvailable)
+                                        {
+                                            {
+
+                                                count = s.Read(data, 0, data.Length);
+                                                fs.Write(data, 0, count);
+                                                sum += count;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
