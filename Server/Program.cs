@@ -10,6 +10,7 @@ namespace Server
 {
     class Program
     {
+        
         static string input = "";
 
         static TcpListener listener;
@@ -17,6 +18,8 @@ namespace Server
 
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
             string localComputerName = Dns.GetHostName();
             Console.WriteLine("DNS : " + localComputerName);
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
@@ -153,8 +156,10 @@ namespace Server
                             }
                             else
                             {
-                                XmlDeclaration xmlDeclaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
+                                XmlDeclaration xmlDeclaration = xmlDoc.CreateXmlDeclaration("1.0", null, null);
                                 xmlDoc.AppendChild(xmlDeclaration);
+                                XmlNode firstNode = xmlDoc.CreateNode(XmlNodeType.Element, "All", "");
+                                xmlDoc.AppendChild(firstNode);
                             }
 
 
@@ -190,6 +195,10 @@ namespace Server
                                     sw.WriteLine("Name : " + Name.InnerText + " Forname : " + Forname.InnerText);
                                 }
                             }
+                        }
+                        else if (input == "echo")
+                        {
+                            sw.WriteLine(sr.ReadLine());
                         }
                         else if (input == "exit")
                         {
