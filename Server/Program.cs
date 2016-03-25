@@ -213,21 +213,27 @@ namespace Server
                         else if(input == "sendFile")
                         {
                             sw.WriteLine("<recieve/>");
-                            string srcPath = @"D:\map.txt";
+                            string srcPath = @"D:\info.txt";
                            
                             using (FileStream fs = new FileStream(srcPath, FileMode.Open, FileAccess.Read))
                             {
                                 sw.WriteLine(fs.Length);
-                                sw.WriteLine("map.txt");
+                                sw.WriteLine("file_recieve_info.txt");
                                 long fileSize = fs.Length;
                                 long sum = 0;   //sum here is the total of sent bytes.
                                 int count = 0;
+                                
                                 byte[] data = new byte[1024];  //8Kb buffer .. you might use a smaller size also.
+                                if (fs.Length < 1024) {
+                                    data = null;
+                                    data = new byte[fs.Length];
+                                }
                                 while (sum < fileSize)
                                 {
                                     count = fs.Read(data, 0, data.Length);
                                     s.Write(data, 0, count);
                                     sum += count;
+                                    Console.WriteLine(sum.ToString());
                                 }
                                 s.Flush();
                             }
