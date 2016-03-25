@@ -33,7 +33,6 @@ namespace Client
 
                 //string input_text = sr.ReadLine();
                 sw.Flush();
-                Console.WriteLine(client.Client.Connected.ToString());
                 try
                 {
 
@@ -66,20 +65,30 @@ namespace Client
                                 {
                                     int count = 0;
                                     long sum = 0;   //sum here is the total of received bytes.
-                                    byte[] data = new byte[1024 * 8];  //8Kb buffer .. you might use a smaller size also.
+                                    byte[] data = new byte[1024];  //8Kb buffer .. you might use a smaller size also.
+                                    if(fileSize < 1024)
+                                    {
+                                        data = null;
+                                        data = new byte[fileSize];
+                                    }
                                     while (sum < fileSize)
                                     {
                                         if (s.DataAvailable)
                                         {
                                             {
-
                                                 count = s.Read(data, 0, data.Length);
                                                 fs.Write(data, 0, count);
                                                 sum += count;
+                                                Console.WriteLine("Input file size : " + sum.ToString() + " fileSize : " + fileSize.ToString());
                                             }
                                         }
+                                        
+                                        
                                     }
+                                    Console.WriteLine(Environment.NewLine + "Transfert ended");
+                                    fs.Close();
                                 }
+                                
                             }
                             else
                             {
