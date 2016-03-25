@@ -46,6 +46,7 @@ namespace Server
             {
                 Console.Title = "Centrall";
                 Socket soc = listener.AcceptSocket();
+                soc.NoDelay = true;
                 Console.WriteLine("Connected: {0}", soc.RemoteEndPoint);
                 try
                 {
@@ -166,10 +167,10 @@ namespace Server
                             XmlElement xmlRoot = xmlDoc.DocumentElement;
                             XmlNode newNode = xmlDoc.CreateNode(XmlNodeType.Element, "Voc", "");
                             XmlNode nameNode = xmlDoc.CreateNode(XmlNodeType.Element, "Name", "");
-                            sw.WriteLine("#Name");
+                            sw.WriteLine("<#Name : />");
                             nameNode.InnerText = sr.ReadLine();
                             XmlNode versionNode = xmlDoc.CreateNode(XmlNodeType.Element, "Forname", "");
-                            sw.WriteLine("#Forname");
+                            sw.WriteLine("<#Forname : />");
                             versionNode.InnerText = sr.ReadLine();
                             newNode.AppendChild(nameNode);
                             newNode.AppendChild(versionNode);
@@ -187,7 +188,7 @@ namespace Server
                                 xmlDoc.Load(xmlFileName);
                                 XmlNodeList nodeList;
                                 XmlNode root = xmlDoc.DocumentElement;
-                                nodeList = root.SelectNodes("//Voc");
+                                nodeList = root.SelectNodes("//All");
                                 foreach (XmlNode xmlNode in nodeList)
                                 {
                                     XmlNode Name = xmlNode.SelectSingleNode("Name");
@@ -198,6 +199,7 @@ namespace Server
                         }
                         else if (input == "echo")
                         {
+                            sw.WriteLine("<#input : />");
                             sw.WriteLine(sr.ReadLine());
                         }
                         else if (input == "exit")
@@ -211,6 +213,7 @@ namespace Server
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("something went rong ...");
                     Console.WriteLine(e.Message);
                 }
                 Console.WriteLine("Disconnected: {0}", soc.RemoteEndPoint);
