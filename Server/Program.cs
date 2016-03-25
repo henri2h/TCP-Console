@@ -220,10 +220,10 @@ namespace Server
                                 sw.WriteLine(fs.Length);
                                 sw.WriteLine("file_recieve_info.txt");
                                 long fileSize = fs.Length;
-                                long sum = 0;   //sum here is the total of sent bytes.
+                                long sum = 0;   
                                 int count = 0;
                                 
-                                byte[] data = new byte[1024];  //8Kb buffer .. you might use a smaller size also.
+                                byte[] data = new byte[1024]; 
                                 if (fs.Length < 1024) {
                                     data = null;
                                     data = new byte[fs.Length];
