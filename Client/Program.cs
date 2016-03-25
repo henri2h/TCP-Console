@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Client
@@ -9,13 +10,11 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient("192.168.0.14", 2055);
-
+            Console.Write("Server IP : ");
+            TcpClient client = new TcpClient(Console.ReadLine(), 2055);
             client.ReceiveTimeout = 500;
             NetworkStream s = client.GetStream();
-
             StreamReader sr = new StreamReader(s);
-
             StreamWriter sw = new StreamWriter(s);
             sw.AutoFlush = true;
             client.NoDelay = true;
@@ -31,42 +30,49 @@ namespace Client
             // initialisation = ok
             while (true)
             {
-
+                
                 //string input_text = sr.ReadLine();
                 sw.Flush();
-
+                Console.WriteLine(client.Client.Connected.ToString());
                 try
                 {
 
                     string inputText = sr.ReadLine();
-                    MatchCollection matches = rgx.Matches(inputText);
-                    if (matches.Count > 0)
+                    if (inputText != null)
                     {
-
-                        MatchCollection matches_in = rgx_in.Matches(inputText);
-                        string parameterName = matches_in[0].Value;
-
-                        if (parameterName == "break")
+                        MatchCollection matches = rgx.Matches(inputText);
+                        if (matches.Count > 0)
                         {
-                            break;
-                        }
-                        if (parameterName == "input")
-                        {
-                            Console.Write("input > ");
-                            sw.WriteLine(Console.ReadLine());
+                            MatchCollection matches_in = rgx_in.Matches(inputText);
+                            string parameterName = matches_in[0].Value;
+
+                            if (parameterName == "break")
+                            {
+                                break;
+                            }
+                            else
+                            if (parameterName == "input")
+                            {
+                                Console.Write("input > ");
+                                sw.WriteLine(Console.ReadLine());
+                            }
+                            else
+                                if(parameterName == "recieve")
+                            {
+                                // to add
+                            }
+                            else
+                            {
+                                Console.Write(parameterName);
+                                sw.WriteLine(Console.ReadLine());
+                            }
                         }
                         else
                         {
-                            Console.Write(parameterName);
-                            sw.WriteLine(Console.ReadLine());
+                            Console.WriteLine(inputText);
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine(inputText);
-                    }
 
-
+                    }
 
                 }
                 catch (IOException)

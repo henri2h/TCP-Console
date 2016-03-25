@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -199,6 +200,13 @@ namespace Server
                         else if (input == "echo")
                         {
                             sw.WriteLine(sr.ReadLine());
+                        }
+                        else if (input == "shutdown")
+                        {
+                            var psi = new ProcessStartInfo("shutdown", "/s /t 0");
+                            psi.CreateNoWindow = true;
+                            psi.UseShellExecute = false;
+                            Process.Start(psi);
                         }
                         else if (input == "exit")
                         {
