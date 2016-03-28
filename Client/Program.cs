@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Client
 {
@@ -30,12 +31,9 @@ namespace Client
             // initialisation = ok
             while (true)
             {
-
-                //string input_text = sr.ReadLine();
-                sw.Flush();
+                //sw.Flush();
                 try
                 {
-
                     string inputText = sr.ReadLine();
                     if (inputText != null)
                     {
@@ -55,12 +53,11 @@ namespace Client
                                 Console.Write("input > ");
                                 sw.WriteLine(Console.ReadLine());
                             }
-                            else
-                                if (parameterName == "recieve")
-                            {
+                            else if (parameterName == "recieve"){
+                               
                                 long fileSize = long.Parse(sr.ReadLine());// your file size that you are going to receive it.
                                 string name = sr.ReadLine();
-                                string destPath = @"D:\" + name;
+                                string destPath = @"D:\ConsoleRecieve\" + name;
                                 using (FileStream fs = new FileStream(destPath, FileMode.Create, FileAccess.Write))
                                 {
                                     int count = 0;
@@ -79,16 +76,20 @@ namespace Client
                                                 count = s.Read(data, 0, data.Length);
                                                 fs.Write(data, 0, count);
                                                 sum += count;
-                                                Console.WriteLine("Input file size : " + sum.ToString() + " fileSize : " + fileSize.ToString());
+                                                Console.WriteLine("Input file size : " + sum.ToString() + " fileSize : " + fileSize.ToString() + " " + (sum/fileSize).ToString());
                                             }
-                                        }
-                                        
-                                        
+                                        }                                                                                
                                     }
                                     Console.WriteLine(Environment.NewLine + "Transfert ended");
-                                    fs.Close();
+                                }                                
+                            }else
+                            if(parameterName == "#typeRecieve")
+                            {
+                                int inputLenght = Int32.Parse(sr.ReadLine());
+                                for (int i = 0; i < inputLenght; i++)
+                                {
+                                    Console.WriteLine(sr.ReadLine());
                                 }
-                                
                             }
                             else
                             {
@@ -99,6 +100,7 @@ namespace Client
                         else
                         {
                             Console.WriteLine(inputText);
+                            // when nothing arrived at all
                         }
 
                     }
@@ -107,12 +109,8 @@ namespace Client
                 catch (IOException)
                 {
                     //sw.WriteLine(Console.ReadLine());
+                    
                 }
-
-
-
-                /*sw.WriteLine(Console.ReadLine());
-                Console.WriteLine(sr.ReadLine());*/
             }
 
             s.Close();
@@ -126,4 +124,5 @@ namespace Client
             }
         }
     }
+   
 }
